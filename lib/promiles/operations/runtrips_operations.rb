@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Promiles
   module Operations
     module RuntripsOperations
@@ -9,7 +8,7 @@ module Promiles
         @trip_legs = trip_legs
         @opts = opts
 
-        http_response = cached_request('promiles_runtrips', cache_duration) do
+        http_response = cached_request(cache_key, cache_duration) do
           connection.post do |req|
             req.url endpoint
             req.headers['Content-Type'] = 'application/json'
@@ -38,7 +37,9 @@ module Promiles
         @opts.deep_transform_keys{ |key| key.to_s.camelize }.to_json
       end
 
-
+      def cache_key
+        Digest::SHA1.hexdigest(@trip_legs.map { |trip_leg| trip_leg.values }.join(' '))
+      end
     end
   end
 end
