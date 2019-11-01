@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'digest'
+
 module Promiles
   module Operations
     module RuntripsOperations
@@ -10,9 +12,8 @@ module Promiles
 
         http_response = cached_request(cache_key, cache_duration) do
           connection.post do |req|
-            req.url endpoint
+            req.url runtrip_endpoint
             req.headers['Content-Type'] = 'application/json'
-            req.headers['apikey'] = @apikey
             req.body = params
           end
         end
@@ -26,7 +27,7 @@ module Promiles
 
       private
 
-      def endpoint
+      def runtrip_endpoint
         '/WebAPI/api/runtrip'
       end
 

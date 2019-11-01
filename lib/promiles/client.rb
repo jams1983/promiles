@@ -4,14 +4,17 @@ require 'active_support'
 require 'active_support/core_ext/numeric'
 require 'faraday'
 require 'faraday/request_id'
+require 'csv'
 
 require_relative 'operations/runtrips_operations'
+require_relative 'operations/truck_stops_operations'
 
 module Promiles
   class Client
     include Operations::RuntripsOperations
+    include Operations::TruckStopsOperations
 
-    attr_writer :apikey
+    attr_writer :apikey, :truck_stops
 
     def initialize(apikey)
       @apikey = apikey
@@ -65,7 +68,14 @@ module Promiles
       result = process_body(response.body)
 
       if response.success?
-        OpenStruct.new(success?: true, status: response.status, content_type: content_type, body: parse_body(result))
+        case content_type_for(response)
+        when :json
+          OpenStruct.new(success?: true, status: response.status, content_type: content_type, body: parse_body(result))
+        when :plain_text
+          OpenStruct.new(success?: true, status: response.status, content_type: content_type, body: CSV.parse(result))
+        else
+          nil
+        end
       else
         handle_error(result, response.status, content_type)
       end

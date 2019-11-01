@@ -17,7 +17,7 @@ module Promiles
     attr_writer :host, :logger, :cache_duration, :timeout, :open_timeout
 
     def host
-      @host ||= 'http://prime.promiles.com'
+      @host ||= 'http://primebeta.promiles.com'
     end
 
     def timeout
