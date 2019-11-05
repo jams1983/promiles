@@ -23,5 +23,11 @@ module Promiles
     attribute :price_date, String
     attribute :latitude, Float
     attribute :longitude, Float
+    attribute :airmiles_from_center, Float
+    attribute :routed_miles_from_center, Float
+    attribute :cardinal_direction_from_center, Float
+    attribute :associations, Array, of: String
+    attribute :fuel_cards, Array, of: String
+    attribute :amenities, Array, of: Promiles::Amenity
   end
 end

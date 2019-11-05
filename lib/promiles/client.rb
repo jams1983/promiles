@@ -7,11 +7,15 @@ require 'faraday/request_id'
 require 'csv'
 
 require_relative 'operations/runtrips_operations'
+require_relative 'operations/csv_truck_stops_operations'
 require_relative 'operations/truck_stops_operations'
+require_relative 'operations/radius_operations'
 
 module Promiles
   class Client
     include Operations::RuntripsOperations
+    include Operations::CsvTruckStopsOperations
+    include Operations::RadiusOperations
     include Operations::TruckStopsOperations
 
     attr_writer :apikey, :truck_stops
@@ -69,12 +73,10 @@ module Promiles
 
       if response.success?
         case content_type_for(response)
-        when :json
-          OpenStruct.new(success?: true, status: response.status, content_type: content_type, body: parse_body(result))
-        when :plain_text
+        when :csv
           OpenStruct.new(success?: true, status: response.status, content_type: content_type, body: CSV.parse(result))
         else
-          nil
+          OpenStruct.new(success?: true, status: response.status, content_type: content_type, body: parse_body(result))
         end
       else
         handle_error(result, response.status, content_type)
@@ -100,6 +102,8 @@ module Promiles
         :xml
       when /html/i
         :html
+      when /csv/i
+        :csv
       else
         :plain_text
       end
