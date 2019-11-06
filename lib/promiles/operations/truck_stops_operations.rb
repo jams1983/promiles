@@ -25,7 +25,7 @@ module Promiles
 
         response = process_response(http_response)
 
-        if response.success?
+        if response.success? && !response.body.blank?
           Promiles::TruckStop.new(response.body)
         end
       end

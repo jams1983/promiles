@@ -89,7 +89,8 @@ module Promiles
     end
 
     def parse_body(body)
-      JSON.parse(body).deep_transform_keys{ |key| key.to_s.underscore.to_sym }
+      result = JSON.parse(body)
+      result.is_a?(Hash) ? result.deep_transform_keys{ |key| key.to_s.underscore.to_sym } : {}
     rescue JSON::ParserError
       {}
     end
