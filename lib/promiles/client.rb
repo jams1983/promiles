@@ -18,10 +18,11 @@ module Promiles
     include Operations::RadiusOperations
     include Operations::TruckStopsOperations
 
-    attr_writer :apikey, :truck_stops
+    attr_writer :apikey, :host
 
-    def initialize(apikey)
+    def initialize(apikey, host)
       @apikey = apikey
+      @host = host
     end
 
     def configuration
@@ -33,7 +34,7 @@ module Promiles
     end
 
     def connection
-      @connection ||= Faraday.new(configuration.host) do |builder|
+      @connection ||= Faraday.new(@host) do |builder|
         builder.request  :url_encoded             # form-encode POST params
         builder.adapter  Faraday.default_adapter  # make requests with Net::HTTP
         #builder.response :logger                  # log requests to $stdout

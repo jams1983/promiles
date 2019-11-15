@@ -14,11 +14,7 @@ module Promiles
   class Configuration
     include Singleton
 
-    attr_writer :host, :logger, :cache_duration, :timeout, :open_timeout
-
-    def host
-      @host ||= 'http://primebeta.promiles.com'
-    end
+    attr_writer :logger, :cache_duration, :timeout, :open_timeout
 
     def timeout
       @timeout || 10
