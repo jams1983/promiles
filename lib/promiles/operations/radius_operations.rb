@@ -9,7 +9,7 @@ module Promiles
       def get_radius(center_location={}, radius=20, cache_duration: configuration.cache_duration)
         @center_location = center_location
         @radius = radius
-        cache_key = Digest::SHA1.hexdigest(@center_location.values.join(' '))
+        cache_key = Digest::SHA1.hexdigest(@center_location.values.join(' ') + @radius.to_s)
 
         http_response = cached_request(cache_key, cache_duration) do
           connection.post do |req|
