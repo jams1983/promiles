@@ -47,6 +47,7 @@ module Promiles
       def row_values(row)
         Promiles::TruckStop.new({
           pro_miles_tsid: row[0],
+          opis_id: row[1],
           name: row[2],
           chain: row[3],
           location: row[4],
